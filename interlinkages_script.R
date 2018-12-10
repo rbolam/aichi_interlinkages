@@ -28,10 +28,12 @@ colnames(linkmat) <- names(linkdf)[-1]
 linkmat
 
 ## Make interactions <2 into zeros    ** this will affect network measures **
+linkmatall <- linkmat
 linkmat[linkmat < 2] <- 0 
 
 ## Make into network graph -> I have made this directed for the measures below
 g <- graph_from_adjacency_matrix(linkmat, mode="directed", weighted=TRUE, diag=FALSE)
+gall <- graph_from_adjacency_matrix(linkmatall, mode="directed", weighted=TRUE, diag=FALSE)
 
 ## Check that weight is listed in graph
 E(g)$weight 
@@ -228,9 +230,12 @@ bs3 <- ggplot(netstrength1, aes(x=Target, y=strength.out, fill=SG)) + geom_bar(s
 grid.arrange(bs1, bs2, bs3, nrow = 1)
 
 ## Points
-ps1 <- ggplot(netstrength1, aes(x=SG, y=strength.all, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none")
-ps2 <- ggplot(netstrength1, aes(x=SG, y=strength.in, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none")
-ps3 <- ggplot(netstrength1, aes(x=SG, y=strength.out, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none")
+ps1 <- ggplot(netstrength1, aes(x=SG, y=strength.all, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none") +
+  theme(legend.position="none") + labs(title="All", x="Strategic Goal", y = "Strength")
+ps2 <- ggplot(netstrength1, aes(x=SG, y=strength.in, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none") +
+  theme(legend.position="none") + labs(title="In", x="Strategic Goal", y = "Strength")
+ps3 <- ggplot(netstrength1, aes(x=SG, y=strength.out, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none") +
+  theme(legend.position="none") + labs(title="Out", x="Strategic Goal", y = "Strength")
 grid.arrange(ps1, ps2, ps3, nrow = 1)
 
 grid.arrange(p1, p2, p3, ps1, ps2, ps3, nrow = 2) # extremely similary patterns to degree
@@ -284,18 +289,84 @@ agstrength1 <- data.frame(TargetN=names(strength(ag)), Target=seq(1,20), SG=as.c
                            strength.out=as.numeric(strength(ag,mode="out")) )  
 agstrength1
 
-
 ## Points
-psag1 <- ggplot(agstrength1, aes(x=SG, y=strength.all, color=SG)) + geom_point(size=2) + geom_text(label=agstrength1$Target, hjust=-1) + theme(legend.position="none")
-psag2 <- ggplot(agstrength1, aes(x=SG, y=strength.in, color=SG)) + geom_point(size=2) + geom_text(label=agstrength1$Target, hjust=-1) + theme(legend.position="none")
-psag3 <- ggplot(agstrength1, aes(x=SG, y=strength.out, color=SG)) + geom_point(size=2) + geom_text(label=agstrength1$Target, hjust=-1) + theme(legend.position="none")
+psag1 <- ggplot(agstrength1, aes(x=SG, y=strength.all, color=SG)) + geom_point(size=2) + geom_text(label=agstrength1$Target, hjust=-1) + 
+  theme(legend.position="none") + labs(title="Agreement - all", x="Strategic Goal", y = "Strength")
+psag2 <- ggplot(agstrength1, aes(x=SG, y=strength.in, color=SG)) + geom_point(size=2) + geom_text(label=agstrength1$Target, hjust=-1) + theme(legend.position="none") +
+  theme(legend.position="none") + labs(title="Agreement -in", x="Strategic Goal", y = "Strength")
+psag3 <- ggplot(agstrength1, aes(x=SG, y=strength.out, color=SG)) + geom_point(size=2) + geom_text(label=agstrength1$Target, hjust=-1) + theme(legend.position="none") +
+  theme(legend.position="none") + labs(title="Agreement - out", x="Strategic Goal", y = "Strength")
+
 grid.arrange(psag1, psag2, psag3, nrow = 1)
 
-grid.arrange(ps1, ps2, ps3, psag1, psag2, psag3, nrow = 2) 
+grid.arrange(ps1, ps2, ps3, psag1, psag2, psag3, nrow = 2) # compare to interactions
+
+
+## Stats
+kruskal.test(strength.all ~ SG, agstrength1) # non sig
+kruskal.test(strength.in ~ SG, agstrength1)  # non sig
+kruskal.test(strength.out ~ SG, agstrength1) # sig
+
+
+## Interactions against agreement
+
+agintstrength <- left_join(agstrength1, netstrength1, by=c("TargetN","Target","SG"))
+agintstrength  
+
+inag1 <- ggplot(agintstrength, aes(x=strength.all.x, y=strength.all.y, color=SG)) + geom_point(size=2) + #geom_text(label=agintstrength$Target, hjust=-1) +  
+  theme(legend.position="none") + labs(title="Strength - all", x="Agreement", y = "Interaction")
+inag2 <- ggplot(agintstrength, aes(x=strength.in.x, y=strength.in.y, color=SG)) + geom_point(size=2) + #geom_text(label=agintstrength$Target, hjust=-1) +
+  theme(legend.position="none") + labs(title="Strength - in", x="Agreement", y = "Interaction")
+inag3 <- ggplot(agintstrength, aes(x=strength.out.x, y=strength.out.y, color=SG)) + geom_point(size=2) + #geom_text(label=agintstrength$Target, hjust=-1) +  
+  theme(legend.position="none") + labs(title="Strength - out", x="Agreement", y = "Interaction")
+
+grid.arrange(inag1, inag2, inag3, nrow = 1)
 
 
 
 
+######################################
+## Cluster analyses on interactions ##
+######################################
+
+# If targets within Goals are closely linked to each other,
+# then a clustering algorithm should place targets into clusters based on the SGs
+
+## 1. Walktrap
+
+intclus1 <- walktrap.community(g, weights=E(g)$weight, steps=2)
+intclus1 
+names(intclus1)
+intclus1$membership
+
+g$wt1 <- intclus1$membership
+ggraph(g, layout="linear", circular=TRUE) +
+  geom_edge_arc(aes(width = weight)) +
+  geom_node_point(aes(colour=g$wt1), size=15) +
+  geom_node_label(aes(label=name), size=3, repel=TRUE) +
+  guides(colour=FALSE) +
+  coord_fixed() +
+  theme_void()
+
+# Try different number of steps
+intclus2 <- walktrap.community(g, weights=E(g)$weight, steps=3)
+intclus3 <- walktrap.community(g, weights=E(g)$weight, steps=4)
+intclus3
+intclus2
+intclus1
+# all the same
+
+
+## 2. Optimal clustering
+
+intclus4 <- cluster_optimal(g, weights=E(g)$weight)
+intclus4
+# same as above
+
+## Compare to graph without interactions <2 removed
+
+intallclus1 <- walktrap.community(gall, weights=E(gall)$weight, steps=2)
+intallclus1
 
 
 
