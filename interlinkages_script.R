@@ -8,6 +8,17 @@ library(igraph)
 library(ggplot2)
 library(tidyverse)
 library(ggraph)
+library(gridExtra)
+
+
+## Dataframe with Strategic Goals
+stratgoals <- data.frame(Target=paste("T", seq(1,20), sep=""), StrategicGoal=rep(c("A","B","C","D","E"),times=c(4,6,3,3,4)),
+                         SGcol=rep(c("dodgerblue3","firebrick2","seagreen3","darkorchid3","orange"),times=c(4,6,3,3,4)))
+
+
+####################################
+## Network graph for interactions ##
+####################################
 
 ## Links dataframe
 linkdf <- read.csv("Marques_interactions.csv")
@@ -16,15 +27,7 @@ rownames(linkmat) <- names(linkdf)[-1]
 colnames(linkmat) <- names(linkdf)[-1]
 linkmat
 
-## Dataframe with Strategic Goals
-stratgoals <- data.frame(Target=paste("T", seq(1,20), sep=""), StrategicGoal=rep(c("A","B","C","D","E"),times=c(4,6,3,3,4)),
-                         SGcol=rep(c("dodgerblue3","firebrick2","seagreen3","darkorchid3","orange"),times=c(4,6,3,3,4)))
-
-
-################
-## Initial graph
-
-## Make interactions <2 into zeros 
+## Make interactions <2 into zeros    ** this will affect network measures **
 linkmat[linkmat < 2] <- 0 
 
 ## Make into network graph -> I have made this directed for the measures below
@@ -41,6 +44,24 @@ ggraph(g, layout="linear", circular=TRUE) +
   guides(colour=FALSE) +
   coord_fixed() +
   theme_void()
+
+
+##########################################
+## Networkgraph for certainty/agreement ##
+##########################################
+
+## Agreement dataframe
+agreedf <- read.csv("Marques_agreement.csv")
+agreemat <- as.matrix(agreedf[,-1])
+rownames(agreemat) <- names(agreedf)[-1]
+colnames(agreemat) <- names(agreedf)[-1]
+agreemat
+
+## Make into network graph -> I have made this directed for the measures below
+ag <- graph_from_adjacency_matrix(agreemat, mode="directed", weighted=TRUE, diag=FALSE)
+
+
+
 
 
 #################################
@@ -145,6 +166,132 @@ for(i in 1:5){
 # Compare network measure between goals, and between targets? 
 
 
+##################################################
+## Turning hypotheses into tests - interactions ##
+##################################################
+
+## Targets within the same strategic goal are more similar
+## to each other than to targets within different goals 
+
+#####
+## 1. Degree = the number of adjacent edges
+## (this is basically the same as Fig 2 from Marques et al.)
+
+netdegree1 <- data.frame(TargetN=names(degree(g)), Target=seq(1,20), SG=as.character(stratgoals$StrategicGoal), 
+                         degree.all=as.numeric(degree(g)),
+                         degree.in=as.numeric(degree(g,mode="in")),
+                         degree.out=as.numeric(degree(g,mode="out")) )  
+netdegree1
+
+## Barplots
+b1 <- ggplot(netdegree1, aes(x=Target, y=degree.all, fill=SG)) + geom_bar(stat="identity")
+b2 <- ggplot(netdegree1, aes(x=Target, y=degree.in, fill=SG)) + geom_bar(stat="identity")
+b3 <- ggplot(netdegree1, aes(x=Target, y=degree.out, fill=SG)) + geom_bar(stat="identity")
+grid.arrange(b1, b2, b3, nrow = 1)
+
+## Points
+p1 <- ggplot(netdegree1, aes(x=SG, y=degree.all, color=SG)) + geom_point(size=2) + geom_text(label=netdegree1$Target, hjust=-1) + theme(legend.position="none")
+p2 <- ggplot(netdegree1, aes(x=SG, y=degree.in, color=SG)) + geom_point(size=2) + geom_text(label=netdegree1$Target, hjust=-1) + theme(legend.position="none")
+p3 <- ggplot(netdegree1, aes(x=SG, y=degree.out, color=SG)) + geom_point(size=2) + geom_text(label=netdegree1$Target, hjust=-1) + theme(legend.position="none")
+grid.arrange(p1, p2, p3, nrow = 1)
+
+## Stats - all SGs
+kruskal.test(degree.all ~ SG, data=netdegree1) # non-sig
+kruskal.test(degree.in ~ SG, data=netdegree1)  # sig
+kruskal.test(degree.out ~ SG, data=netdegree1) # sig
+
+## post-hoc testing
+degreeposthoc <- data.frame()
+for(i in 1:4){
+  for(j in c(i+1):5){
+  out1 <- wilcox.test(degree.in ~ SG, data=netdegree1[which(netdegree1$SG==LETTERS[i]|netdegree1$SG==LETTERS[j]),])
+  out2 <- wilcox.test(degree.out ~ SG, data=netdegree1[which(netdegree1$SG==LETTERS[i]|netdegree1$SG==LETTERS[j]),])
+  outdf <- data.frame(SG1=LETTERS[i], SG2=LETTERS[j], in.p=out1$p.value, out.p=out2$p.value)
+  degreeposthoc <- rbind(degreeposthoc, outdf)
+  }}
+degreeposthoc
+
+
+#####
+## 2. Strength = summing up the edge weights of the adjacent edges for each vertex
+
+netstrength1 <- data.frame(TargetN=names(strength(g)), Target=seq(1,20), SG=as.character(stratgoals$StrategicGoal), 
+                         strength.all=as.numeric(strength(g)),
+                         strength.in=as.numeric(strength(g,mode="in")),
+                         strength.out=as.numeric(strength(g,mode="out")) )  
+netstrength1
+
+## Barplots
+bs1 <- ggplot(netstrength1, aes(x=Target, y=strength.all, fill=SG)) + geom_bar(stat="identity")
+bs2 <- ggplot(netstrength1, aes(x=Target, y=strength.in, fill=SG)) + geom_bar(stat="identity")
+bs3 <- ggplot(netstrength1, aes(x=Target, y=strength.out, fill=SG)) + geom_bar(stat="identity")
+grid.arrange(bs1, bs2, bs3, nrow = 1)
+
+## Points
+ps1 <- ggplot(netstrength1, aes(x=SG, y=strength.all, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none")
+ps2 <- ggplot(netstrength1, aes(x=SG, y=strength.in, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none")
+ps3 <- ggplot(netstrength1, aes(x=SG, y=strength.out, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none")
+grid.arrange(ps1, ps2, ps3, nrow = 1)
+
+grid.arrange(p1, p2, p3, ps1, ps2, ps3, nrow = 2) # extremely similary patterns to degree
+
+
+#################
+## 3. Betweenness - roughly defined by the number of shortest paths going threough a vertex or edge
+## (not sure what this means exactly for our understanding)
+
+netbetween1 <- data.frame(TargetN=names(betweenness(g)), Target=seq(1,20), SG=as.character(stratgoals$StrategicGoal), 
+                           between1=as.numeric(betweenness(g)), # directed
+                           between2=as.numeric(betweenness(g,directed=F)) )  # undirected
+netbetween1
+
+## Points
+pb1 <- ggplot(netbetween1, aes(x=SG, y=between1, color=SG)) + geom_point(size=2) + geom_text(label=netbetween1$Target, hjust=-1) + theme(legend.position="none")
+pb2 <- ggplot(netbetween1, aes(x=SG, y=between2, color=SG)) + geom_point(size=2) + geom_text(label=netbetween1$Target, hjust=-1) + theme(legend.position="none")
+
+grid.arrange(pb1, pb2, nrow = 1)
+
+
+
+
+## Goal A has the strongest downstream 
+## impacts on Goal B
+
+# Can manipulate input matrix to test this 
+
+
+
+
+
+
+
+
+
+
+###############################################
+## Turning hypotheses into tests - agreement ##
+###############################################
+
+# Is there variation in strength of agreement (i.e. understanding) among goals?
+
+#####
+## Strength = summing up the edge weights of the adjacent edges for each vertex
+
+
+agstrength1 <- data.frame(TargetN=names(strength(ag)), Target=seq(1,20), SG=as.character(stratgoals$StrategicGoal), 
+                           strength.all=as.numeric(strength(ag)),
+                           strength.in=as.numeric(strength(ag,mode="in")),
+                           strength.out=as.numeric(strength(ag,mode="out")) )  
+agstrength1
+
+
+## Points
+psag1 <- ggplot(agstrength1, aes(x=SG, y=strength.all, color=SG)) + geom_point(size=2) + geom_text(label=agstrength1$Target, hjust=-1) + theme(legend.position="none")
+psag2 <- ggplot(agstrength1, aes(x=SG, y=strength.in, color=SG)) + geom_point(size=2) + geom_text(label=agstrength1$Target, hjust=-1) + theme(legend.position="none")
+psag3 <- ggplot(agstrength1, aes(x=SG, y=strength.out, color=SG)) + geom_point(size=2) + geom_text(label=agstrength1$Target, hjust=-1) + theme(legend.position="none")
+grid.arrange(psag1, psag2, psag3, nrow = 1)
+
+grid.arrange(ps1, ps2, ps3, psag1, psag2, psag3, nrow = 2) 
 
 
 
