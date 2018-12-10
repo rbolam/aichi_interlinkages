@@ -48,6 +48,8 @@ ggraph(g, layout="linear", circular=TRUE) +
   theme_void()
 
 
+
+
 ##########################################
 ## Networkgraph for certainty/agreement ##
 ##########################################
@@ -192,9 +194,12 @@ b3 <- ggplot(netdegree1, aes(x=Target, y=degree.out, fill=SG)) + geom_bar(stat="
 grid.arrange(b1, b2, b3, nrow = 1)
 
 ## Points
-p1 <- ggplot(netdegree1, aes(x=SG, y=degree.all, color=SG)) + geom_point(size=2) + geom_text(label=netdegree1$Target, hjust=-1) + theme(legend.position="none")
-p2 <- ggplot(netdegree1, aes(x=SG, y=degree.in, color=SG)) + geom_point(size=2) + geom_text(label=netdegree1$Target, hjust=-1) + theme(legend.position="none")
-p3 <- ggplot(netdegree1, aes(x=SG, y=degree.out, color=SG)) + geom_point(size=2) + geom_text(label=netdegree1$Target, hjust=-1) + theme(legend.position="none")
+p1 <- ggplot(netdegree1, aes(x=SG, y=degree.all, color=SG)) + geom_point(size=2) + geom_text(label=netdegree1$Target, hjust=-1) + theme(legend.position="none") +
+  labs(title="Interactions - All", x="Strategic Goal", y = "Degree")
+p2 <- ggplot(netdegree1, aes(x=SG, y=degree.in, color=SG)) + geom_point(size=2) + geom_text(label=netdegree1$Target, hjust=-1) + theme(legend.position="none") +
+  labs(title="Interactions - In", x="Strategic Goal", y = "Degree")
+p3 <- ggplot(netdegree1, aes(x=SG, y=degree.out, color=SG)) + geom_point(size=2) + geom_text(label=netdegree1$Target, hjust=-1) + theme(legend.position="none") +
+  labs(title="Interactions - Out", x="Strategic Goal", y = "Degree")
 grid.arrange(p1, p2, p3, nrow = 1)
 
 ## Stats - all SGs
@@ -231,11 +236,11 @@ grid.arrange(bs1, bs2, bs3, nrow = 1)
 
 ## Points
 ps1 <- ggplot(netstrength1, aes(x=SG, y=strength.all, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none") +
-  theme(legend.position="none") + labs(title="All", x="Strategic Goal", y = "Strength")
+  theme(legend.position="none") + labs(title="Interactions - All", x="Strategic Goal", y = "Strength")
 ps2 <- ggplot(netstrength1, aes(x=SG, y=strength.in, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none") +
-  theme(legend.position="none") + labs(title="In", x="Strategic Goal", y = "Strength")
+  theme(legend.position="none") + labs(title="Interactions - In", x="Strategic Goal", y = "Strength")
 ps3 <- ggplot(netstrength1, aes(x=SG, y=strength.out, color=SG)) + geom_point(size=2) + geom_text(label=netstrength1$Target, hjust=-1) + theme(legend.position="none") +
-  theme(legend.position="none") + labs(title="Out", x="Strategic Goal", y = "Strength")
+  theme(legend.position="none") + labs(title="Interactions - Out", x="Strategic Goal", y = "Strength")
 grid.arrange(ps1, ps2, ps3, nrow = 1)
 
 grid.arrange(p1, p2, p3, ps1, ps2, ps3, nrow = 2) # extremely similary patterns to degree
@@ -264,10 +269,9 @@ grid.arrange(pb1, pb2, nrow = 1)
 
 # Can manipulate input matrix to test this 
 
-
-
-
-
+linkmatall
+goalB <- as.data.frame(linkmatall[which(stratgoals$StrategicGoal=="B"),])
+goalB$Target <- row.names(goalB)
 
 
 
@@ -367,11 +371,18 @@ intclus4
 
 intallclus1 <- walktrap.community(gall, weights=E(gall)$weight, steps=2)
 intallclus1
+intallclus2 <- walktrap.community(gall, weights=E(gall)$weight, steps=3)
+intallclus2
+intallclus3 <- cluster_optimal(gall, weights=E(gall)$weight)
+intallclus3
 
-
-
-
-
-
+gall$wt1 <- intallclus1$membership
+ggraph(gall, layout="linear", circular=TRUE) +
+  geom_edge_arc(aes(width = weight)) +
+  geom_node_point(aes(colour=gall$wt1), size=15) +
+  geom_node_label(aes(label=name), size=3, repel=TRUE) +
+  guides(colour=FALSE) +
+  coord_fixed() +
+  theme_void()
 
 
