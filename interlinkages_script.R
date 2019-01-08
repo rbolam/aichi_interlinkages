@@ -424,6 +424,30 @@ ggraph(SGgraph, layout="linear", circular=TRUE) +
   theme_void()
 
 
+######################################
+## Colour edges based on upstream node
+
+SGgraph$edgecolor <- rep(c("A","B","C","D","E"), each=4)
+
+ggraph(SGgraph, layout="linear", circular=TRUE) +
+  geom_edge_fan(arrow = arrow(length = unit(10, 'mm')), 
+                start_cap = circle(3, 'mm'),
+                end_cap = circle(3, 'mm') , 
+                aes(width = weight, color=SGgraph$edgecolor)) +
+  geom_node_point(aes(colour=name), size=15) +
+  geom_node_label(aes(label=name), size=3, repel=F) +
+  guides(colour=FALSE) +
+  coord_fixed() +
+  theme_void()  + 
+  theme(legend.position="none")
+
+
+
+
+
+
+
+
 
 
 
