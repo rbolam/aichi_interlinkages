@@ -3,7 +3,7 @@
 # ------------------------------ Aichi Interlinkages ----------------------------####
 
 # a script which we can hopefully share
-
+library(plyr)
 library(igraph)
 library(ggplot2)
 library(tidyverse)
@@ -384,5 +384,51 @@ ggraph(gall, layout="linear", circular=TRUE) +
   guides(colour=FALSE) +
   coord_fixed() +
   theme_void()
+
+
+
+
+#############################################
+## Collapsing network into strategic goals ##
+#############################################
+
+## Change Targets to Strategic Goals 
+linkdf2 <- as.data.frame(linkdf) %>% gather(key="DownstreamTarget", value=Value, -Target)
+linkdf2 <- left_join(linkdf2, stratgoals[,-3])
+names(linkdf2)[4] <- "UpstreamSG"
+linkdf2 <- left_join(linkdf2, stratgoals[,-3], by=c("DownstreamTarget"="Target"))
+names(linkdf2)[5] <- "DownstreamSG"
+linkdf2 <- linkdf2[-which(is.na(linkdf2$Value)),]
+linkdf2 <- aggregate(linkdf2$Value, by=list(linkdf2$UpstreamSG, linkdf2$DownstreamSG), sum)
+names(linkdf2) <- c("UpstreamSG","DownstreamSG","Weight")
+linkdf2 <- as.data.frame(linkdf2) %>% spread(key="DownstreamSG", value="Weight")
+
+## Make into matrix
+linkmat2 <- as.matrix(linkdf2[,-1])
+rownames(linkmat2) <- names(linkdf2)[-1]
+linkmat2
+
+## Make into network graph 
+SGgraph <- graph_from_adjacency_matrix(linkmat2, mode="directed", weighted=TRUE, diag=FALSE)
+
+## Quick plot 
+ggraph(SGgraph, layout="linear", circular=TRUE) +
+  geom_edge_arc(arrow = arrow(length = unit(5, 'mm')), 
+                start_cap = circle(3, 'mm'),
+                end_cap = circle(3, 'mm') , 
+                aes(width = weight)) +
+  geom_node_point(aes(colour=name), size=15) +
+  geom_node_label(aes(label=name), size=3, repel=TRUE) +
+  guides(colour=FALSE) +
+  coord_fixed() +
+  theme_void()
+
+
+
+
+
+
+
+
 
 
