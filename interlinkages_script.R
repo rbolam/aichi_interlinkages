@@ -443,10 +443,20 @@ ggraph(SGgraph, layout="linear", circular=TRUE) +
 
 
 
+######################################################
+## Non-directional (comparable with indicators network)
 
+## Make into network graph 
+SGgraph2 <- graph_from_adjacency_matrix(linkmat2, mode="undirected", weighted=TRUE, diag=FALSE)
 
-
-
+ggraph(SGgraph2, layout="linear", circular=TRUE) +
+  geom_edge_arc(aes(width = weight)) +
+  geom_node_point(aes(colour=name), size=15) +
+  geom_node_label(aes(label=name), size=3, repel=F) +
+  guides(colour=FALSE) +
+  coord_fixed() +
+  theme_void()  + 
+  theme(legend.position="none")
 
 
 
