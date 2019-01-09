@@ -276,6 +276,28 @@ goalB$Target <- row.names(goalB)
 
 
 
+############################################################
+## Repeating analyses on network including interactions<2 ##
+############################################################
+
+#####
+## Strength = summing up the edge weights of the adjacent edges for each vertex
+
+netstrength2 <- data.frame(TargetN=names(strength(gall)), Target=seq(1,20), SG=as.character(stratgoals$StrategicGoal), 
+                           strength.all=as.numeric(strength(gall)),
+                           strength.in=as.numeric(strength(gall,mode="in")),
+                           strength.out=as.numeric(strength(gall,mode="out")) )  
+netstrength2
+
+## Barplots
+bs1b <- ggplot(netstrength2, aes(x=Target, y=strength.all, fill=SG)) + geom_bar(stat="identity")
+bs2b <- ggplot(netstrength2, aes(x=Target, y=strength.in, fill=SG)) + geom_bar(stat="identity")
+bs3b <- ggplot(netstrength2, aes(x=Target, y=strength.out, fill=SG)) + geom_bar(stat="identity")
+grid.arrange(bs1b, bs2b, bs3b, nrow = 1)
+
+
+
+
 ###############################################
 ## Turning hypotheses into tests - agreement ##
 ###############################################
@@ -339,6 +361,7 @@ grid.arrange(inag1, inag2, inag3, nrow = 1)
 summary(lm(Interactions.out ~ Agree.out, agintstrength))
 summary(lm(Interactions.in ~ Agree.in, agintstrength))
 summary(lm(Interactions.all ~ Agree.all, agintstrength))
+
 
 
 
