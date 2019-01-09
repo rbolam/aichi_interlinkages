@@ -179,7 +179,6 @@ for(i in 1:5){
 
 #####
 ## 1. Degree = the number of adjacent edges
-## (this is basically the same as Fig 2 from Marques et al.)
 
 netdegree1 <- data.frame(TargetN=names(degree(g)), Target=seq(1,20), SG=as.character(stratgoals$StrategicGoal), 
                          degree.all=as.numeric(degree(g)),
@@ -311,21 +310,35 @@ kruskal.test(strength.all ~ SG, agstrength1) # non sig
 kruskal.test(strength.in ~ SG, agstrength1)  # non sig
 kruskal.test(strength.out ~ SG, agstrength1) # sig
 
-
+#################################
 ## Interactions against agreement
 
-agintstrength <- left_join(agstrength1, netstrength1, by=c("TargetN","Target","SG"))
+## For comparison, calculate strength on interactions including strength=1
+
+netallstrength1 <- data.frame(TargetN=names(strength(gall)), Target=seq(1,20), SG=as.character(stratgoals$StrategicGoal), 
+                          strength.all=as.numeric(strength(gall)),
+                          strength.in=as.numeric(strength(gall,mode="in")),
+                          strength.out=as.numeric(strength(gall,mode="out")) )  
+netallstrength1
+
+
+agintstrength <- left_join(agstrength1, netallstrength1, by=c("TargetN","Target","SG"))
+names(agintstrength)[4:9] <- c("Agree.all","Agree.in","Agree.out","Interactions.all","Interactions.in","Interactions.out")
 agintstrength  
 
-inag1 <- ggplot(agintstrength, aes(x=strength.all.x, y=strength.all.y, color=SG)) + geom_point(size=2) + #geom_text(label=agintstrength$Target, hjust=-1) +  
+inag1 <- ggplot(agintstrength, aes(x=Agree.all, y=Interactions.all, color=SG)) + geom_point(size=2) + #geom_text(label=agintstrength$Target, hjust=-1) +  
   theme(legend.position="none") + labs(title="Strength - all", x="Agreement", y = "Interaction")
-inag2 <- ggplot(agintstrength, aes(x=strength.in.x, y=strength.in.y, color=SG)) + geom_point(size=2) + #geom_text(label=agintstrength$Target, hjust=-1) +
+inag2 <- ggplot(agintstrength, aes(x=Agree.in, y=Interactions.in, color=SG)) + geom_point(size=2) + #geom_text(label=agintstrength$Target, hjust=-1) +
   theme(legend.position="none") + labs(title="Strength - in", x="Agreement", y = "Interaction")
-inag3 <- ggplot(agintstrength, aes(x=strength.out.x, y=strength.out.y, color=SG)) + geom_point(size=2) + #geom_text(label=agintstrength$Target, hjust=-1) +  
+inag3 <- ggplot(agintstrength, aes(x=Agree.out, y=Interactions.out, color=SG)) + geom_point(size=2) + #geom_text(label=agintstrength$Target, hjust=-1) +  
   theme(legend.position="none") + labs(title="Strength - out", x="Agreement", y = "Interaction")
 
 grid.arrange(inag1, inag2, inag3, nrow = 1)
 
+## Stats - linear relationship between strength and agreement? 
+summary(lm(Interactions.out ~ Agree.out, agintstrength))
+summary(lm(Interactions.in ~ Agree.in, agintstrength))
+summary(lm(Interactions.all ~ Agree.all, agintstrength))
 
 
 
