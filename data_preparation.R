@@ -4,6 +4,7 @@
 
 ## Data preparation 
 
+rm(list=ls())
 library(plyr)
 library(igraph)
 library(ggplot2)
@@ -116,6 +117,29 @@ E(SGgraphb)$upstream <- rep(c("A","B","C","D","E"), each=4)
 #######################################################
 ## Collapsing agreement network into strategic goals ##
 #######################################################
+
+## Mean agreement
+
+## Change Targets to Strategic Goals 
+agreedf2 <- as.data.frame(agreedf) %>% gather(key="DownstreamTarget", value=Value, -Target)
+agreedf2 <- left_join(agreedf2, stratgoals[,-3])
+names(agreedf2)[4] <- "UpstreamSG"
+agreedf2 <- left_join(agreedf2, stratgoals[,-3], by=c("DownstreamTarget"="Target"))
+names(agreedf2)[5] <- "DownstreamSG"
+agreedf2 <- agreedf2[-which(is.na(agreedf2$Value)),]
+agreedf2 <- aggregate(agreedf2$Value, by=list(agreedf2$UpstreamSG, agreedf2$DownstreamSG), mean)
+names(agreedf2) <- c("UpstreamSG","DownstreamSG","Weight")
+agreedf2 <- as.data.frame(agreedf2) %>% spread(key="DownstreamSG", value="Weight")
+
+## Make into matrix
+agreematSG <- as.matrix(agreedf2[,-1])
+rownames(agreematSG) <- names(agreedf2)[-1]
+agreematSG
+
+## Make into network graph 
+SGagreegraph <- graph_from_adjacency_matrix(agreematSG, mode="directed", weighted=TRUE, diag=FALSE)
+E(SGagreegraph)$upstream <- rep(c("A","B","C","D","E"), each=4)
+
 
 
 

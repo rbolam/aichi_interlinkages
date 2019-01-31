@@ -53,5 +53,58 @@ ggSGsum <- ggraph(SGgraphb, layout="linear", circular=TRUE) +
 grid.arrange(ggSGmean, ggSGsum, nrow = 1)
 
 
-# ?possible to change colour of strongest link to darker shade?
+
+
+
+##########################
+## Network of agreement ##
+##########################
+
+agreematSG
+
+ggraph(SGagreegraph, layout="linear", circular=TRUE) +
+  geom_edge_fan(arrow = arrow(length = unit(5, 'mm')), start_cap = circle(3, 'mm'), end_cap = circle(3, 'mm') ,  
+                aes(width = weight, colour=upstream)) +
+  geom_node_point(aes(colour=name), size=15) +
+  geom_node_label(aes(label=name), size=3, repel=TRUE) +
+  guides(colour=FALSE) + coord_fixed() + theme_void()  + ggtitle("Strength of agreement among experts") 
+
+
+
+
+################################
+## Agreement versus interactions
+
+## Prepare dataframe (check oot ma piping!)
+tocompare <- as.data.frame(agreedf2) %>% gather(key="DownstreamSG", value=Agreement, -UpstreamSG) %>% 
+  left_join(gather(linkdf2, key="DownstreamSG", value=Interaction, -UpstreamSG)) %>%
+  filter(DownstreamSG!=UpstreamSG) 
+tocompare
+
+## Plotting
+intvagree <- ggplot(tocompare, aes(x=Agreement, y=Interaction, colour=UpstreamSG)) + geom_point(size=3) 
+agreevsSG <- ggplot(tocompare, aes(x=UpstreamSG, y=Agreement, colour=DownstreamSG)) + geom_point(size=3) 
+
+grid.arrange(intvagree, agreevsSG, nrow = 1)
+
+## Stats?
+summary(lm(Interaction ~ Agreement, tocompare))
+summary(lm(Agreement ~ UpstreamSG, tocompare))
+summary(lm(Interaction ~ UpstreamSG, tocompare))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
