@@ -1,0 +1,129 @@
+Target,Primary,Indicator
+1_Public Awareness,2,Ocean Health Index
+1_Public Awareness,1,Biodiversity Barometer
+1_Public Awareness,1,WAZA bio-literacy survey (Biodiversity literacy in global zoo and aquarium visitors)
+10_Vulnerable ecosystems,2,Wildlife Picture Index
+10_Vulnerable ecosystems,2,Legislation for prevention and control of invasive alien species (IAS); encompassing “Trends in policy responses; legislation and management plans to control and prevent spread of invasive alien species” and “Proportion of countries adopting relevant national legislation and adequately resourcing the prevention or control of invasive alien species”
+10_Vulnerable ecosystems,2,Trends in invasive alien species vertebrate eradications
+10_Vulnerable ecosystems,2,Red List Index
+10_Vulnerable ecosystems,1,Climatic impacts on European and North American birds
+10_Vulnerable ecosystems,1,Red List Index (reef-building corals)
+10_Vulnerable ecosystems,1,Ocean Health Index
+10_Vulnerable ecosystems,1,Cumulative Human Impacts on Marine Ecosystems
+11_Protected areas,2,Wildlife Picture Index
+11_Protected areas,2,Legislation for prevention and control of invasive alien species (IAS); encompassing “Trends in policy responses; legislation and management plans to control and prevent spread of invasive alien species” and “Proportion of countries adopting relevant national legislation and adequately resourcing the prevention or control of invasive alien species”
+11_Protected areas,2,Trends in invasive alien species vertebrate eradications
+11_Protected areas,2,Growth in Species Occurrence Records Accessible Through GBIF
+11_Protected areas,2,Red List Index
+11_Protected areas,1,Protected Area Coverage of Key Biodiversity Areas
+11_Protected areas,1,Protected Areas Management Effectiveness
+11_Protected areas,1,Protected Area Coverage of Ecoregions
+11_Protected areas,1,Proportion of important sites for terrestrial and freshwater biodiversity that are covered by protected areas; by ecosystem type
+11_Protected areas,1,Protected Area Representativeness Index (PARC-Representativeness)
+11_Protected areas,1,Protected Area Connectedness Index (PARC-Connectedness)
+11_Protected areas,1,Wildlife Picture Index in tropical forest protected areas
+11_Protected areas,1,Protected area coverage
+12_Threatened species,2,Wild Bird Index (forest & farmland specialist birds)
+12_Threatened species,2,Wildlife Picture Index in tropical forest protected areas
+12_Threatened species,2,Red List Index (forest specialist species)
+12_Threatened species,2,Proportion of known species assessed through the IUCN Red List
+12_Threatened species,2,Ocean Health Index
+12_Threatened species,2,Cumulative Human Impacts on Marine Ecosystems
+12_Threatened species,2,Human Appropriation of Net Primary Production (HANPP)
+12_Threatened species,2,Protected area coverage
+12_Threatened species,2,Legislation for prevention and control of invasive alien species (IAS); encompassing “Trends in policy responses; legislation and management plans to control and prevent spread of invasive alien species” and “Proportion of countries adopting relevant national legislation and adequately resourcing the prevention or control of invasive alien species”
+12_Threatened species,2,Trends in invasive alien species vertebrate eradications
+12_Threatened species,2,Growth in Species Occurrence Records Accessible Through GBIF
+12_Threatened species,1,Number of extinctions prevented
+12_Threatened species,1,Number of species extinctions (birds and mammals)
+12_Threatened species,1,Biodiversity Intactness Index
+12_Threatened species,1,Living Planet Index (forest specialists)
+12_Threatened species,1,Living Planet Index
+12_Threatened species,1,Wildlife Picture Index
+12_Threatened species,1,Red List Index
+13_Genetic diversity,2,Growth in Species Occurrence Records Accessible Through GBIF
+13_Genetic diversity,1,Proportion of local breeds classified as being at risk; not-at-risk or at unknown level of risk of extinction
+14_Ecosystem services,2,Wetland Extent Trends Index
+14_Ecosystem services,2,Biodiversity Intactness Index
+14_Ecosystem services,2,Protected area coverage
+14_Ecosystem services,2,Red List Index
+14_Ecosystem services,1,Red List Index (pollinating species)
+14_Ecosystem services,1,Red List Index (species used for food and medicine)
+14_Ecosystem services,1,Coverage by protected areas of important sites for mountain biodiversity
+15_Resilience and restoration,2,Proportion of land that is degraded over total land area
+15_Resilience and restoration,2,Ocean Health Index
+15_Resilience and restoration,2,Cumulative Human Impacts on Marine Ecosystems
+15_Resilience and restoration,2,Human Appropriation of Net Primary Production (HANPP)
+15_Resilience and restoration,2,Wildlife Picture Index
+16_ABS,1,Number of Parties to the Convention on Biological Diversity (CBD) that have deposited the instrument of ratification; acceptance; approval or accession of the Nagoya Protocol
+17_NBSAPs,2,Protected area coverage
+17_NBSAPs,2,Legislation for prevention and control of invasive alien species (IAS); encompassing “Trends in policy responses; legislation and management plans to control and prevent spread of invasive alien species” and “Proportion of countries adopting relevant national legislation and adequately resourcing the prevention or control of invasive alien species”
+17_NBSAPs,2,Trends in invasive alien species vertebrate eradications
+17_NBSAPs,1,Number of countries with developed or revised NBSAPs
+18_Traditional knowledge,1,Index of Linguistic Diversity
+19_Knowledge science and technology,2,Cumulative Human Impacts on Marine Ecosystems
+19_Knowledge science and technology,1,Proportion of known species assessed through the IUCN Red List
+19_Knowledge science and technology,1,Growth in Species Occurrence Records Accessible Through GBIF
+20_Resource mobilization,1,Official development assistance for biodiversity
+3_Subsidies and incentives,1,Number of countries with biodiversity-relevant taxes
+3_Subsidies and incentives,1,Number of countries with biodiversity-relevant charges and fees
+3_Subsidies and incentives,1,Number of countries with biodiversity-relevant tradable permit schemes
+3_Subsidies and incentives,1,Trends in potentially environmentally harmful elements of government support to agriculture (producer support estimate)
+4_Sustainable production and consumption,2,MSC Certified Catch
+4_Sustainable production and consumption,2,Ocean Health Index
+4_Sustainable production and consumption,2,Cumulative Human Impacts on Marine Ecosystems
+4_Sustainable production and consumption,2,Wildlife Picture Index
+4_Sustainable production and consumption,2,Red List Index
+4_Sustainable production and consumption,1,Ecological Footprint
+4_Sustainable production and consumption,1,Red List Index (impacts of utilisation)
+4_Sustainable production and consumption,1,Percentage of Parties with legislation in Category 1 under CITES National Legislation Project (NLP)
+4_Sustainable production and consumption,1,Red List Index (internationally traded species)
+4_Sustainable production and consumption,1,Human Appropriation of Net Primary Production (HANPP)
+5_Habitat loss degradation and fragmentation,2,Proportion of important sites for terrestrial and freshwater biodiversity that are covered by protected areas; by ecosystem type
+5_Habitat loss degradation and fragmentation,2,Wild Bird Index (forest & farmland specialist birds)
+5_Habitat loss degradation and fragmentation,2,Living Planet Index (forest specialists)
+5_Habitat loss degradation and fragmentation,2,Living Planet Index
+5_Habitat loss degradation and fragmentation,2,Ocean Health Index
+5_Habitat loss degradation and fragmentation,2,Cumulative Human Impacts on Marine Ecosystems
+5_Habitat loss degradation and fragmentation,2,Wildlife Picture Index
+5_Habitat loss degradation and fragmentation,2,Protected area coverage
+5_Habitat loss degradation and fragmentation,2,Legislation for prevention and control of invasive alien species (IAS); encompassing “Trends in policy responses; legislation and management plans to control and prevent spread of invasive alien species” and “Proportion of countries adopting relevant national legislation and adequately resourcing the prevention or control of invasive alien species”
+5_Habitat loss degradation and fragmentation,2,Trends in invasive alien species vertebrate eradications
+5_Habitat loss degradation and fragmentation,2,Red List Index
+5_Habitat loss degradation and fragmentation,1,Forest area as a proportion of total land area
+5_Habitat loss degradation and fragmentation,1,CGMFC-21 - Continuous Global Mangrove Forest Cover for the 21st Century
+5_Habitat loss degradation and fragmentation,1,Biodiversity Habitat Index
+5_Habitat loss degradation and fragmentation,1,Wetland Extent Trends Index
+5_Habitat loss degradation and fragmentation,1,Red List Index (forest specialist species)
+5_Habitat loss degradation and fragmentation,1,Proportion of land that is degraded over total land area
+6_Fisheries,2,Living Planet Index
+6_Fisheries,2,Ocean Health Index
+6_Fisheries,2,Cumulative Human Impacts on Marine Ecosystems
+6_Fisheries,2,Red List Index
+6_Fisheries,1,Marine Trophic Index
+6_Fisheries,1,MSC Certified Catch
+6_Fisheries,1,Proportion of fish stocks within biologically sustainable levels
+6_Fisheries,1,Red List Index (impacts of fisheries)
+6_Fisheries,1,Living Planet Index (trends in target and bycatch species)
+7_Sustainable agriculture aquaculture forestry,2,Trends in potentially environmentally harmful elements of government support to agriculture (producer support estimate)
+7_Sustainable agriculture aquaculture forestry,2,Living Planet Index (forest specialists)
+7_Sustainable agriculture aquaculture forestry,2,Ocean Health Index
+7_Sustainable agriculture aquaculture forestry,2,Human Appropriation of Net Primary Production (HANPP)
+7_Sustainable agriculture aquaculture forestry,2,Wildlife Picture Index
+7_Sustainable agriculture aquaculture forestry,2,Red List Index
+7_Sustainable agriculture aquaculture forestry,1,Wild Bird Index (forest & farmland specialist birds)
+7_Sustainable agriculture aquaculture forestry,1,Area of forest under sustainable management: total FSC and PEFC forest management certification
+7_Sustainable agriculture aquaculture forestry,1,Living Planet Index (farmland specialists)
+8_Pollution,2,Human Appropriation of Net Primary Production (HANPP)
+8_Pollution,2,Red List Index
+8_Pollution,1,Trends in Nitrogen Deposition
+8_Pollution,1,Trends in Loss of Reactive Nitrogen to the Environment
+8_Pollution,1,Water Quality Index for Biodiversity
+8_Pollution,1,Red List Index (impacts of pollution)
+9_Invasive Alien Species,2,Growth in Species Occurrence Records Accessible Through GBIF
+9_Invasive Alien Species,2,Red List Index
+9_Invasive Alien Species,1,Trends in the numbers of invasive alien species introduction events
+9_Invasive Alien Species,1,Red List Index (impacts of invasive alien species)
+9_Invasive Alien Species,1,Legislation for prevention and control of invasive alien species (IAS); encompassing “Trends in policy responses; legislation and management plans to control and prevent spread of invasive alien species” and “Proportion of countries adopting relevant national legislation and adequately resourcing the prevention or control of invasive alien species”
+9_Invasive Alien Species,1,Trends in invasive alien species vertebrate eradications
+2_Biodiversity values mainstreamed,1,None

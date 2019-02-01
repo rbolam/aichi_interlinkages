@@ -33,14 +33,15 @@ linkmat
 
 linkmatall <- linkmat
 # Make into directed network graph
-gall <- graph_from_adjacency_matrix(linkmatall, mode="directed", weighted=TRUE, diag=FALSE)
+Tgraphall <- graph_from_adjacency_matrix(linkmatall, mode="directed", weighted=TRUE, diag=FALSE)
+V(Tgraphall)$SG <- rep(c("A","B","C","D","E"), times=c(4,6,3,3,4))
 
 ## 2. Make interactions <2 into zeros  ** this will affect network measures **
 
 linkmat[linkmat < 2] <- 0 
 # Make into directed network graph
-gall <- graph_from_adjacency_matrix(linkmatall, mode="directed", weighted=TRUE, diag=FALSE)
-
+Tgraphstrong <- graph_from_adjacency_matrix(linkmat, mode="directed", weighted=TRUE, diag=FALSE)
+V(Tgraphstrong)$SG <- rep(c("A","B","C","D","E"), times=c(4,6,3,3,4))
 
 
 ##########################################
@@ -56,8 +57,8 @@ agreemat
 
 
 ## Make into network graph -> I have made this directed for the measures below
-ag <- graph_from_adjacency_matrix(agreemat, mode="directed", weighted=TRUE, diag=FALSE)
-
+Tgraphagree <- graph_from_adjacency_matrix(agreemat, mode="directed", weighted=TRUE, diag=FALSE)
+V(Tgraphagree)$SG <- rep(c("A","B","C","D","E"), times=c(4,6,3,3,4))
 
 
 ##########################################################
@@ -143,6 +144,54 @@ E(SGagreegraph)$upstream <- rep(c("A","B","C","D","E"), each=4)
 
 
 
+########################
+## Indicators network ##
+########################
+
+#
+# Have primary and secondary indicators - how to deal with these?
+#
+
+#################
+## Target network 
+
+indicatorsdf <- read.csv("aichi_target_indicators.csv")
+indicatorsdf$Target <- as.character(indicatorsdf$Target)
+indicatorsdf$Target <- unlist(lapply(indicatorsdf$Target, function(x) strsplit(x, "_")[[1]][1]))
+indicatorsdf$Target <- as.numeric(indicatorsdf$Target)
+
+summary(indicatorsdf)
+indicatorsdf[1:10,]
+length(unique(indicatorsdf$Indicator))
+tapply(indicatorsdf$Target, indicatorsdf$Target, length)
+
+# transform to table
+indicatorsmat <- crossprod(table(indicatorsdf[,c("Indicator","Target")]))
+dim(indicatorsmat)
+colnames(indicatorsmat) <- paste("T", colnames(indicatorsmat), sep="")
+rownames(indicatorsmat) <- paste("T", rownames(indicatorsmat), sep="")
+indicatorsmat
+
+# Make into undirected network graph
+indicatorgraph <- graph_from_adjacency_matrix(indicatorsmat, mode="undirected", weighted=TRUE, diag=FALSE)
+V(indicatorgraph)$SG <- rep(c("A","B","C","D","E"), times=c(4,6,3,3,4))
+
+
+#########################
+## Strategic Goal network
+
+## Change Targets to Strategic Goals 
+indicatorsdf$Target <- paste("T",indicatorsdf$Target,sep="")
+indicatorsdf <- left_join(indicatorsdf, stratgoals[,-3])
+indicatorsSGmat <- crossprod(table(indicatorsdf[,c("Indicator","StrategicGoal")]))
+indicatorsSGmat
+
+# Make into undirected network graph
+indSGgraph <- graph_from_adjacency_matrix(indicatorsSGmat, mode="undirected", weighted=TRUE, diag=FALSE)
+
+
+
+
 
 ####################
 ## Save workspace ##
@@ -150,5 +199,22 @@ E(SGagreegraph)$upstream <- rep(c("A","B","C","D","E"), each=4)
 
 ls()
 save.image("Prepared_data.RData")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

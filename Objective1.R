@@ -2,7 +2,7 @@
 
 #### ------------------------------ Aichi Interlinkages ----------------------------####
 
-## Objective 1
+## Objective 1: Test how well the strategic goals fit the DPSIR framework 
 
 rm(list=ls())
 library(plyr)
@@ -94,7 +94,17 @@ summary(lm(Interaction ~ UpstreamSG, tocompare))
 
 
 
+###########################
+## Network of indicators ##
+###########################
 
+indicatorsSGmat
+
+ggraph(indSGgraph, layout="linear", circular=TRUE) +
+  geom_edge_fan(aes(width = weight)) +
+  geom_node_point(aes(colour=name), size=15) +
+  geom_node_label(aes(label=name), size=3, repel=TRUE) +
+  guides(colour=FALSE) + coord_fixed() + theme_void()  
 
 
 
