@@ -193,18 +193,30 @@ indSGgraph <- graph_from_adjacency_matrix(indicatorsSGmat, mode="undirected", we
 
 
 
+
+###############################
+## Theoretical DPSIR network ##
+###############################
+
+dpsir.df <- read.csv("theoretical_DPSIR_network.csv")
+dpsir.df
+dpsirm <- as.matrix(dpsir.df[,-1])
+rownames(dpsirm) <- names(dpsirm)[-1]
+dpsirm
+
+dpsirgraph <- graph_from_adjacency_matrix(dpsirm, mode="directed", weighted=TRUE, diag=FALSE)
+E(dpsirgraph)$upstream <- c("A","B","C","D","E","E","E")
+
+
+
+
+
 ####################
 ## Save workspace ##
 ####################
 
 ls()
 save.image("Prepared_data.RData")
-
-
-
-
-
-
 
 
 

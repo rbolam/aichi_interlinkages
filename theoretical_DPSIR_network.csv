@@ -1,0 +1,6 @@
+StrategicGoal,A,B,C,D,E
+A,NA,1,0,0,0
+B,0,NA,1,0,0
+C,0,0,NA,1,0
+D,0,0,0,NA,1
+E,1,1,1,0,NA
