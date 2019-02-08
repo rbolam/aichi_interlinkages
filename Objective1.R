@@ -53,7 +53,7 @@ ggSGsum <- ggraph(SGgraphb, layout="linear", circular=TRUE) +
 
 grid.arrange(ggSGmean, ggSGsum, nrow = 1)
 
-
+ggSGmean
 
 
 
@@ -206,9 +206,7 @@ allm2Ib <- ggplot(data=closenessinI2, aes(x=StrategicGoal, y=value, colour=varia
   geom_point(size=3) + labs(title="Closeness IN - inverse weights", x="Strategic Goal", y="Closeness") 
 allm2Ic <- ggplot(data=closenessoutI2, aes(x=StrategicGoal, y=value, colour=variable)) +
   geom_point(size=3) + labs(title="Closeness OUT - inverse weights", x="Strategic Goal", y="Closeness") 
-
-
-                            
+                          
 allm3 <- ggplot(data=betweennessall2, aes(x=StrategicGoal, y=value, colour=variable)) +
   geom_point(position=position_jitter(h=0, w=0.2),alpha = 0.5, size=3) + labs(title="Betweenness network measure", x="Strategic Goal", y="Betweenness")
 allm4 <- ggplot(data=eigen_centralityall2, aes(x=StrategicGoal, y=value, colour=variable)) +
@@ -224,7 +222,32 @@ grid.arrange(allm2, allm2b, allm2c, allm2I, allm2Ib, allm2Ic, nrow = 2)
 grid.arrange(allm3, allm4, nrow = 1)
 
 
-y<- closeness(SGgraph, mode="in", weights=1/E(SGgraph)$weight)
+## Subset for summary 
 
-x <- closeness(SGgraph, mode="in")
-plot(y~x)
+strengthin <- data.frame(StrategicGoal=c("A","B","C","D","E"),
+                         Interaction=strength(SGgraph, mode="in"), DPSIR=strength(dpsirgraph, mode="in"))
+strengthout <- data.frame(StrategicGoal=c("A","B","C","D","E"),
+                          Interaction=strength(SGgraph, mode="out"), DPSIR=strength(dpsirgraph, mode="out"))
+closenessinI <- data.frame(StrategicGoal=c("A","B","C","D","E"),
+                           Interaction=closeness(SGgraph, mode="in", weights=1/E(SGgraph)$weight), DPSIR=closeness(dpsirgraph, mode="in", weights=1/E(dpsirgraph)$weight))
+closenessoutI <- data.frame(StrategicGoal=c("A","B","C","D","E"),
+                            Interaction=closeness(SGgraph, mode="out", weights=1/E(SGgraph)$weight), DPSIR=closeness(dpsirgraph, mode="out", weights=1/E(dpsirgraph)$weight))
+
+
+grid.arrange(allm1b, allm1c, nrow = 1)
+
+grid.arrange(allm2Ib, allm2Ic, nrow = 1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
